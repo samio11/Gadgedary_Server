@@ -3,21 +3,27 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('payment')
 export class Payment {
   @PrimaryGeneratedColumn()
-  id: number; // Unique Payment ID
+  id: number;
 
   @Column()
-  cart_id: number; // Reference to Cart ID
+  customer_email: string; // Must match Cart entity's email
+
+  @Column()
+  product_name: string; // Name of the purchased product
 
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number; // Payment Amount
+  price: number; // Final paid price
+
+  @Column()
+  transaction_id: string; // Stripe Transaction ID
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  payment_date: Date; // Payment Date
+  payment_date: Date;
 
   @Column({
     type: 'enum',
-    enum: ['Pending', 'Payed'],
-    default: 'Payed', // Default status
+    enum: ['Pending', 'Paid'],
+    default: 'Pending',
   })
-  payment_status: 'Pending' | 'Payed'; // Payment Status
+  payment_status: 'Pending' | 'Paid'; // Payment Status
 }
